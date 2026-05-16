@@ -41,7 +41,7 @@ const spaces = [
   {
     name: 'Disco Room',
     sqft: '2,100',
-    capacity: 250,
+    capacity: 191,
     tvs: 4,
     description: 'A vibrant space with a polished dance floor, disco ball, and high-energy atmosphere. Perfect for funk, disco, and dance parties.',
     imageBaseName: 'disco-room-front',
@@ -50,7 +50,7 @@ const spaces = [
   {
     name: 'Gibson Room',
     sqft: '4,845',
-    capacity: 150,
+    capacity: 483,
     tvs: 3,
     description: 'A guitar-themed performance space featuring backline equipment and vintage amps. Named in tribute to the iconic Gibson guitar legacy.',
     imageBaseName: 'gibson-room-rear',
@@ -59,7 +59,7 @@ const spaces = [
   {
     name: 'Piano Room',
     sqft: '800',
-    capacity: 75,
+    capacity: 208,
     tvs: 2,
     description: 'An intimate space featuring a grand piano. Ideal for singer-songwriters, jazz ensembles, acoustic performances, and comedy shows. Perfect for a more laid-back night of live entertainment in a cozy setting.',
     imageBaseName: 'piano-room-wide',
@@ -68,7 +68,6 @@ const spaces = [
   {
     name: 'Rooftop Patio',
     sqft: '1,200',
-    capacity: 483,
     tvs: 6,
     description: 'An open-air rooftop escape overlooking Sixth Street. Perfect for winding down after a show, enjoying a drink with friends, or taking in the Austin skyline. Features comfortable seating, string lights, and a relaxed atmosphere away from the music inside.',
     imageBaseName: 'rooftop-patio-left',
@@ -276,8 +275,12 @@ export default function Index() {
                   {/* Stats row */}
                   <div className="flex items-center gap-4 text-xs font-display tracking-wider uppercase text-muted-foreground border-t border-border pt-3">
                     <span>{space.sqft} sqft</span>
-                    <span className="text-primary/30">•</span>
-                    <span>{space.capacity} cap.</span>
+                    {space.capacity && (
+                      <>
+                        <span className="text-primary/30">•</span>
+                        <span>{space.capacity} cap.</span>
+                      </>
+                    )}
                     <span className="text-primary/30">•</span>
                     <span>{space.tvs} TVs</span>
                   </div>
