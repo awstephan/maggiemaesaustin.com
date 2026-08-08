@@ -51,6 +51,7 @@ const spaces = [
     name: 'Gibson Room',
     sqft: '4,845',
     capacity: 483,
+    capacityLabel: '483 CAP.(includes rooftop)',
     tvs: 3,
     description: 'A guitar-themed performance space featuring backline equipment and vintage amps. Named in tribute to the iconic Gibson guitar legacy.',
     imageBaseName: 'gibson-room-rear',
@@ -141,7 +142,7 @@ export default function Index() {
               See What's On
             </Link>
             <Link
-              to="/contact"
+              to="/book-private-event"
               className="px-8 py-3.5 border border-primary/50 text-primary font-display text-sm tracking-widest uppercase rounded hover:bg-primary/10 transition-all"
             >
               Book a Private Event
@@ -278,7 +279,7 @@ export default function Index() {
                     {space.capacity && (
                       <>
                         <span className="text-primary/30">•</span>
-                        <span>{space.capacity} cap.</span>
+                        <span>{space.capacityLabel || `${space.capacity} cap.`}</span>
                       </>
                     )}
                     <span className="text-primary/30">•</span>
@@ -291,7 +292,7 @@ export default function Index() {
 
           <div className="text-center mt-10">
             <Link
-              to="/contact"
+              to="/book-private-event"
               className="inline-flex px-8 py-3.5 bg-primary text-primary-foreground font-display text-sm tracking-widest uppercase rounded hover:bg-primary/80 transition-all shadow-lg shadow-primary/20"
             >
               Book Your Private Event

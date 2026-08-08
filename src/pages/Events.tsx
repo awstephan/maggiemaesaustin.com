@@ -263,14 +263,12 @@ export default function Events() {
             have the space, the staff, and the sound.
           </p>
           <div className="flex flex-wrap gap-4 justify-center">
-            <a
-              href="https://form.typeform.com/to/gAECOx5v"
-              target="_blank"
-              rel="noopener noreferrer"
+            <Link
+              to="/book-private-event"
               className="inline-flex items-center gap-2 px-8 py-3.5 bg-primary text-primary-foreground font-display text-sm tracking-widest uppercase rounded hover:bg-primary/80 transition-all shadow-lg shadow-primary/30"
             >
-              Inquire About Booking <ExternalLink size={14} />
-            </a>
+              Inquire About Booking
+            </Link>
             <Link
               to="/contact"
               className="inline-flex items-center gap-2 px-8 py-3.5 border border-primary/50 text-primary font-display text-sm tracking-widest uppercase rounded hover:bg-primary/10 transition-all"

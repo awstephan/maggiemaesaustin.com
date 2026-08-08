@@ -46,6 +46,16 @@ export default tseslint.config(
     },
   },
   {
+    files: ["server/**/*.js"],
+    languageOptions: {
+      ecmaVersion: 2022,
+      globals: globals.node,
+    },
+    rules: {
+      "no-unused-vars": ["error", { argsIgnorePattern: "^_" }],
+    },
+  },
+  {
     files: ["**/*.html"],
     plugins: {
       "@html-eslint": htmlEslint,

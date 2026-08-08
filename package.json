@@ -3,8 +3,12 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=20.19.0"
+  },
   "scripts": {
     "dev": "npm i --silent && vite",
+    "start:api": "node server/index.js",
     "build": "npm i --silent && vite build -l error && cp dist/index.html dist/404.html && echo 'Project built successfully!'",
     "test": "npm i --silent && tsc --noEmit && eslint && vitest run --reporter=dot --silent && vite build -l error && cp dist/index.html dist/404.html && echo 'All tests passed!'"
   },
@@ -51,10 +55,15 @@
     "clsx": "^2.1.1",
     "cmdk": "^1.0.0",
     "date-fns": "^3.6.0",
+    "dotenv": "^17.4.2",
     "embla-carousel-react": "^8.3.0",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.6.2",
+    "helmet": "^8.3.0",
     "idb": "^8.0.3",
     "input-otp": "^1.2.4",
     "lucide-react": "^0.462.0",
+    "nodemailer": "^9.0.5",
     "nostr-tools": "^2.13.0",
     "qrcode": "^1.5.4",
     "react": "^18.3.1",

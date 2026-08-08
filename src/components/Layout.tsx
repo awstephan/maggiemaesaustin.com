@@ -62,7 +62,7 @@ function Header() {
               );
             })}
             <Link
-              to="/contact"
+              to="/book-private-event"
               className="px-5 py-2 bg-primary text-primary-foreground font-display text-sm tracking-widest uppercase rounded hover:bg-primary/80 transition-colors duration-200 shadow-md shadow-primary/30"
             >
               Book Event
@@ -102,7 +102,7 @@ function Header() {
             );
           })}
           <Link
-            to="/contact"
+            to="/book-private-event"
             className="px-5 py-2 bg-primary text-primary-foreground font-display text-sm tracking-widest uppercase rounded text-center hover:bg-primary/80 transition-colors mt-1"
           >
             Book Event

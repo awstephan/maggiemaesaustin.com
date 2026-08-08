@@ -5,6 +5,7 @@ import Index from "./pages/Index";
 import Events from "./pages/Events";
 import Calendar from "./pages/Calendar";
 import Contact from "./pages/Contact";
+import BookPrivateEvent from "./pages/BookPrivateEvent";
 import Admin from "./pages/Admin";
 import { NIP19Page } from "./pages/NIP19Page";
 import NotFound from "./pages/NotFound";
@@ -18,6 +19,7 @@ export function AppRouter() {
         <Route path="/events" element={<Events />} />
         <Route path="/calendar" element={<Calendar />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/book-private-event" element={<BookPrivateEvent />} />
         <Route path="/admin" element={<Admin />} />
         {/* NIP-19 route for npub1, note1, naddr1, nevent1, nprofile1 */}
         <Route path="/:nip19" element={<NIP19Page />} />

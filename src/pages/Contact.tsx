@@ -2,6 +2,7 @@ import { useSeoMeta } from '@unhead/react';
 import { MapPin, Clock, ExternalLink, Zap, Phone, MessageSquare, Mail, Wine, Users } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { ResponsiveImage } from '@/components/ResponsiveImage';
+import { Link } from 'react-router-dom';
 
 const hours = [
   { day: 'Monday', open: '7:00 PM', close: '2:00 AM' },
@@ -76,14 +77,12 @@ export default function Contact() {
                     </li>
                   ))}
                 </ul>
-                <a
-                  href="https://form.typeform.com/to/gAECOx5v"
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <Link
+                  to="/book-private-event"
                   className="inline-flex items-center gap-2 px-6 py-2.5 bg-primary text-primary-foreground font-display text-xs tracking-widest uppercase rounded hover:bg-primary/80 transition-all shadow-md shadow-primary/20"
                 >
-                  Book a Private Event <ExternalLink size={12} />
-                </a>
+                  Book a Private Event
+                </Link>
               </div>
 
               {/* Contact */}

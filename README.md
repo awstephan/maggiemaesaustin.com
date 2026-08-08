@@ -15,6 +15,7 @@ Maggie Mae's is a historic live music venue on 6th Street in Austin, Texas. This
 - **Direct Messaging** — NIP-04 encrypted messaging between patrons
 - **Nostr Integration** — Full protocol support including profiles, notes, and zaps
 - **Blossom Media Upload** — Image uploads via Blossom servers
+- **Private Event Inquiries** — Server-side SMTP delivery for venue booking requests
 - **Pluggable Authentication** — NIP-07 compatible signers (Alby, nos2x, etc.)
 
 ## Tech Stack
@@ -118,7 +119,7 @@ npm run build
 # Output in dist/
 ```
 
-For Vercel: Connect repository and it auto-deploys on push.
+For the Debian VPS deployment, including SMTP environment, systemd, and Nginx proxy setup, see [DEPLOYMENT.md](DEPLOYMENT.md).
 
 ## License
 
