@@ -4,7 +4,8 @@ import { Link } from 'react-router-dom';
 import { Music, Star, Users, Wine, ChevronDown } from 'lucide-react';
 import { Layout } from '@/components/Layout';
 import { ImageModal } from '@/components/ImageModal';
-import { ResponsiveImage, getImagePath } from '@/components/ResponsiveImage';
+import { ResponsiveImage } from '@/components/ResponsiveImage';
+import { getImagePath } from '@/lib/responsiveImages';
 
 const LOGO_URL = getImagePath('logo');
 

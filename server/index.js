@@ -16,23 +16,46 @@ const environmentSchema = z.object({
   PORT: z.coerce.number().int().min(1).max(65535).default(3001),
 });
 
+function getAustinDateTimeMinimum() {
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: 'America/Chicago',
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(new Date());
+  const value = (type) => parts.find((part) => part.type === type)?.value ?? '';
+  return `${value('year')}-${value('month')}-${value('day')}T${value('hour')}:${value('minute')}`;
+}
+
+function isValidLocalDateTime(value) {
+  if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(value)) return false;
+
+  const [date, time] = value.split('T');
+  const [year, month, day] = date.split('-').map(Number);
+  const [hour, minute] = time.split(':').map(Number);
+  const parsed = new Date(Date.UTC(year, month - 1, day, hour, minute));
+  return parsed.getUTCFullYear() === year
+    && parsed.getUTCMonth() === month - 1
+    && parsed.getUTCDate() === day
+    && parsed.getUTCHours() === hour
+    && parsed.getUTCMinutes() === minute;
+}
+
 const inquirySchema = z
   .object({
     name: z.string().trim().min(1).max(120),
+    organization: z.string().trim().max(160).default(''),
     email: z.string().trim().email().max(254),
     phone: z.string().trim().min(1).max(40),
-    occasion: z.string().trim().min(1).max(160),
-    eventType: z.string().trim().max(80).default(''),
+    occasion: z.string().trim().max(160).default(''),
     date: z
       .string()
-      .regex(/^\d{4}-\d{2}-\d{2}$/)
-      .refine((date) => !Number.isNaN(Date.parse(`${date}T00:00:00Z`)) && new Date(`${date}T00:00:00Z`).toISOString().slice(0, 10) === date)
-      .refine((date) => date >= new Intl.DateTimeFormat('en-CA', {
-        timeZone: 'America/Chicago',
-        year: 'numeric',
-        month: '2-digit',
-        day: '2-digit',
-      }).format(new Date())),
+      .regex(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/)
+      .refine(isValidLocalDateTime)
+      .refine((date) => date >= getAustinDateTimeMinimum()),
     guestCount: z.coerce.number().int().min(1).max(987),
     preferredSpace: z.string().trim().max(80).default(''),
     hostedBar: z.boolean().default(false),
@@ -97,11 +120,11 @@ function formatInquiry(inquiry) {
 
   const fields = [
     ['Name', inquiry.name],
+    ...(inquiry.organization ? [['Organization', inquiry.organization]] : []),
     ['Email', inquiry.email],
     ['Phone', inquiry.phone],
-    ['Occasion', inquiry.occasion],
-    ['Event type', inquiry.eventType || 'Not specified'],
-    ['Desired date', inquiry.date],
+    ...(inquiry.occasion ? [['Occasion', inquiry.occasion]] : []),
+    ['Desired date and time', `${inquiry.date} America/Chicago`],
     ['Guest count', inquiry.guestCount],
     ['Preferred space', inquiry.preferredSpace || 'No preference'],
     ['Services', services.length > 0 ? services.join('; ') : 'None selected'],
@@ -186,14 +209,14 @@ async function start() {
       }
 
       const { text, html } = formatInquiry(inquiry);
-      const safeOccasion = inquiry.occasion.replace(/[\r\n]+/g, ' ');
+      const safeSubjectDetail = (inquiry.occasion || `${inquiry.name} on ${inquiry.date}`).replace(/[\r\n]+/g, ' ');
 
       try {
         await transporter.sendMail({
           from: environment.EVENT_INQUIRY_FROM,
           to: environment.EVENT_INQUIRY_TO,
           replyTo: { name: inquiry.name, address: inquiry.email },
-          subject: `Private Event Inquiry - ${safeOccasion}`,
+          subject: `Private Event Inquiry - ${safeSubjectDetail}`,
           text,
           html,
         });

@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient, useQuery } from '@tanstack/react-query';
 import { useNostr } from '@nostrify/react';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
-import type { NostrEvent } from '@nostrify/nostrify';
 import { nowSecs } from '@/lib/utils';
 
 /**

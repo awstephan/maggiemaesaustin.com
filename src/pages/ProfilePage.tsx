@@ -9,6 +9,7 @@ import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useIsFollowing, useFollow } from '@/hooks/useFollow';
 
 import { ZapButton } from '@/components/ZapButton';
+import LoginDialog from '@/components/auth/LoginDialog';
 import { NoteContent } from '@/components/NoteContent';
 import { Layout } from '@/components/Layout';
 import { Skeleton } from '@/components/ui/skeleton';
@@ -103,6 +104,8 @@ export function ProfilePage({ pubkey }: ProfilePageProps) {
     }
     toggleFollow({ pubkey, action: isFollowing ? 'unfollow' : 'follow' });
   };
+
+  const handleLogin = () => setShowLogin(false);
 
   const formatDate = (timestamp: number) => {
     const date = new Date(timestamp * 1000);
@@ -223,7 +226,7 @@ export function ProfilePage({ pubkey }: ProfilePageProps) {
                 </span>
                 {lightningAddress && (
                   <ZapButton
-                    target={{ pubkey, kind: 0 } as any}
+                    target={author.event}
                     lightningAddress={lightningAddress}
                     className="text-xs"
                   >
@@ -312,6 +315,11 @@ export function ProfilePage({ pubkey }: ProfilePageProps) {
           </div>
         </div>
       </div>
+      <LoginDialog
+        isOpen={showLogin}
+        onClose={() => setShowLogin(false)}
+        onLogin={handleLogin}
+      />
     </Layout>
   );
 }

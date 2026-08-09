@@ -13,7 +13,6 @@ import type { NostrEvent } from '@nostrify/nostrify';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCurrentUser } from '@/hooks/useCurrentUser';
 import { useToast } from '@/hooks/useToast';
-import { MAGGIE_MAES_TAG } from '@/lib/config';
 import { formatEventDate, formatEventTime, type MaggieEvent } from '@/lib/maggie';
 
 // ── EventListItem ─────────────────────────────────────────────────────────────

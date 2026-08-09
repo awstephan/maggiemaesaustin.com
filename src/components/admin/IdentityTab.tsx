@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { nip19 } from 'nostr-tools';
-import { UserPlus, UserMinus, AlertTriangle, CheckCircle2, Loader2 } from 'lucide-react';
+import { UserPlus, UserMinus, AlertTriangle, Loader2 } from 'lucide-react';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { CopyButton } from '@/components/CopyButton';
 import { ConfirmDialog } from '@/components/admin/ConfirmDialog';

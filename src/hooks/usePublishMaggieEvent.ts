@@ -27,11 +27,6 @@ export interface PublishEventInput {
   recurringAmount?: number;
 }
 
-/** Convert a datetime-local string to a unix timestamp (seconds). */
-function localToUnix(localStr: string): number {
-  return Math.floor(new Date(localStr).getTime() / 1000);
-}
-
 /** Generate a unique d-tag identifier. */
 function generateDTag(): string {
   return `maggie-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
@@ -51,13 +46,6 @@ function getRecurringUntil(): number {
   return Math.floor(now.getTime() / 1000);
 }
 
-/** Calculate number of events to create based on recurrence type */
-function getRecurrenceCount(type: 'weekly' | 'biweekly' | 'monthly'): number {
-  const now = nowSecs();
-  const until = getRecurringUntil();
-  return Math.ceil((until - now) / RECURRENCE_INTERVALS[type]);
-}
-
 /**
  * Publish a NIP-52 kind:31923 calendar event directly to the bar relays.
  * Bypasses the user's personal relay list entirely.
@@ -71,13 +59,13 @@ export function usePublishMaggieEvent() {
     mutationFn: async (input: PublishEventInput) => {
       if (!user) throw new Error('Not logged in');
 
-const isRecurring = input.recurring && input.recurring !== '';
-  const baseInterval = isRecurring ? RECURRENCE_INTERVALS[input.recurring as 'weekly' | 'biweekly' | 'monthly'] : 0;
-  // Use provided amount, or default to max based on recurrence type
-  const maxForType = { weekly: 26, biweekly: 13, monthly: 6 };
-  const maxAmount = input.recurring ? maxForType[input.recurring as keyof typeof maxForType] : 26;
-  const numEvents = isRecurring ? (input.recurringAmount || maxAmount) : 1;
-  const recurringUntil = isRecurring ? getRecurringUntil() : undefined;
+      const recurrence = input.recurring || undefined;
+      const baseInterval = recurrence ? RECURRENCE_INTERVALS[recurrence] : 0;
+      // Use provided amount, or default to max based on recurrence type
+      const maxForType = { weekly: 26, biweekly: 13, monthly: 6 };
+      const maxAmount = recurrence ? maxForType[recurrence] : 26;
+      const numEvents = recurrence ? (input.recurringAmount || maxAmount) : 1;
+      const recurringUntil = recurrence ? getRecurringUntil() : undefined;
   
   // Generate a series identifier for recurring events (used to delete entire series)
   const seriesId = `maggie-series-${Date.now()}`;
@@ -125,8 +113,8 @@ const isRecurring = input.recurring && input.recurring !== '';
         ];
 
         // Add recurrence tags only to the first event
-        if (isRecurring && i === 0) {
-          tags.push(['recurring', input.recurring]);
+        if (recurrence && i === 0) {
+          tags.push(['recurring', recurrence]);
           if (recurringUntil) {
             tags.push(['recurring_until', String(recurringUntil)]);
           }

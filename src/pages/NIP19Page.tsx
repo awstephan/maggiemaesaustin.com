@@ -22,11 +22,12 @@ export function NIP19Page() {
 
   switch (type) {
     case 'npub':
-    case 'nprofile':
+    case 'nprofile': {
       // npub: decoded.data is the raw hex string
       // nprofile: decoded.data is { pubkey, relays, ... }
       const pubkey = type === 'npub' ? decoded.data : decoded.data.pubkey;
       return <ProfilePage pubkey={pubkey} />;
+    }
 
     case 'note':
     case 'nevent':

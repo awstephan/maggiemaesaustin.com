@@ -12,10 +12,10 @@ import { toast } from '@/hooks/useToast';
 
 interface BookingForm {
   name: string;
+  organization: string;
   email: string;
   phone: string;
   occasion: string;
-  eventType: string;
   date: string;
   guestCount: string;
   preferredSpace: string;
@@ -32,10 +32,10 @@ interface BookingForm {
 
 const initialForm: BookingForm = {
   name: '',
+  organization: '',
   email: '',
   phone: '',
   occasion: '',
-  eventType: '',
   date: '',
   guestCount: '',
   preferredSpace: '',
@@ -53,13 +53,18 @@ const initialForm: BookingForm = {
 const selectClassName =
   'flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-base text-foreground ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2';
 
-function getAustinDateMinimum(): string {
-  return new Intl.DateTimeFormat('en-CA', {
+function getAustinDateTimeMinimum(): string {
+  const parts = new Intl.DateTimeFormat('en-US', {
     timeZone: 'America/Chicago',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  }).format(new Date());
+    hour: '2-digit',
+    minute: '2-digit',
+    hourCycle: 'h23',
+  }).formatToParts(new Date());
+  const value = (type: Intl.DateTimeFormatPartTypes) => parts.find((part) => part.type === type)?.value ?? '';
+  return `${value('year')}-${value('month')}-${value('day')}T${value('hour')}:${value('minute')}`;
 }
 
 function createInquiryMailto(form: BookingForm): string {
@@ -67,16 +72,17 @@ function createInquiryMailto(form: BookingForm): string {
     'I tried to submit a private event inquiry through the website.',
     '',
     `Name: ${form.name.slice(0, 120)}`,
+    ...(form.organization ? [`Organization: ${form.organization.slice(0, 160)}`] : []),
     `Phone: ${form.phone.slice(0, 40)}`,
-    `Occasion: ${form.occasion.slice(0, 160)}`,
-    `Desired date: ${form.date}`,
+    ...(form.occasion ? [`Occasion: ${form.occasion.slice(0, 160)}`] : []),
+    `Desired date and time: ${form.date}`,
     `Guest count: ${form.guestCount}`,
     '',
     'Please contact me to complete the inquiry.',
   ].join('\n');
 
   return `mailto:info@maggiemaesaustin.com?subject=${encodeURIComponent(
-    `Private Event Inquiry - ${form.occasion}`,
+    `Private Event Inquiry - ${form.occasion || form.name}`,
   )}&body=${encodeURIComponent(body)}`;
 }
 
@@ -223,6 +229,10 @@ export default function BookPrivateEvent() {
                 <Input id="name" autoComplete="name" maxLength={120} required value={form.name} onChange={(event) => update('name', event.target.value)} />
               </div>
               <div className="space-y-2">
+                <Label htmlFor="organization">Organization</Label>
+                <Input id="organization" autoComplete="organization" maxLength={160} value={form.organization} onChange={(event) => update('organization', event.target.value)} />
+              </div>
+              <div className="space-y-2">
                 <Label htmlFor="email">Email *</Label>
                 <Input id="email" type="email" autoComplete="email" maxLength={254} required value={form.email} onChange={(event) => update('email', event.target.value)} />
               </div>
@@ -231,24 +241,12 @@ export default function BookPrivateEvent() {
                 <Input id="phone" type="tel" autoComplete="tel" maxLength={40} required value={form.phone} onChange={(event) => update('phone', event.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="occasion">What's the occasion? *</Label>
-                <Input id="occasion" maxLength={160} required placeholder="Birthday, company celebration..." value={form.occasion} onChange={(event) => update('occasion', event.target.value)} />
+                <Label htmlFor="occasion">What's the occasion?</Label>
+                <Input id="occasion" maxLength={160} placeholder="Birthday, company celebration..." value={form.occasion} onChange={(event) => update('occasion', event.target.value)} />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="event-type">Event type</Label>
-                <select id="event-type" className={selectClassName} value={form.eventType} onChange={(event) => update('eventType', event.target.value)}>
-                  <option value="">Select an event type</option>
-                  <option>Corporate event</option>
-                  <option>Birthday or celebration</option>
-                  <option>Wedding after-party</option>
-                  <option>Band showcase</option>
-                  <option>Full venue buyout</option>
-                  <option>Other</option>
-                </select>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="date">Desired date *</Label>
-                <Input id="date" type="date" min={getAustinDateMinimum()} required value={form.date} onChange={(event) => update('date', event.target.value)} />
+                <Label htmlFor="date">Desired date and time *</Label>
+                <Input id="date" type="datetime-local" min={getAustinDateTimeMinimum()} required value={form.date} onChange={(event) => update('date', event.target.value)} />
               </div>
               <div className="space-y-2">
                 <Label htmlFor="guest-count">Estimated guest count *</Label>

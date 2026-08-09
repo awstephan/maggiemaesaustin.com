@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import { PlusCircle, Loader2, CheckCircle2, Save, Trash2, Upload } from 'lucide-react';
 import { usePublishMaggieEvent } from '@/hooks/usePublishMaggieEvent';
 import { useUploadFile } from '@/hooks/useUploadFile';
-import { useAdminConfig, useTemplateList, useTemplateMutations, type EventTemplate } from '@/hooks/useAdminConfig';
+import { useTemplateList, useTemplateMutations, type EventTemplate } from '@/hooks/useAdminConfig';
 import { useToast } from '@/hooks/useToast';
 import { MAGGIE_MAES_STAGES } from '@/lib/config';
 import { cn } from '@/lib/utils';
@@ -112,7 +112,7 @@ export function PublishEventForm({ editingEvent, onCancelEdit }: PublishEventFor
       const max = maxAmounts[form.recurring as keyof typeof maxAmounts] || 26;
       setForm((prev) => ({ ...prev, recurringAmount: String(max) }));
     }
-  }, [form.recurring]);
+  }, [form.recurring, form.recurringAmount]);
 
   // Time slots 4pm → 4am
   const timeSlots: { value: string; label: string }[] = [];
@@ -149,7 +149,7 @@ export function PublishEventForm({ editingEvent, onCancelEdit }: PublishEventFor
     });
     if (field === 'startTime' && value && !form.endTime) {
       const [h, m] = value.split(':').map(Number);
-      let endHour = (h + 4) % 24;
+      const endHour = (h + 4) % 24;
       setForm((prev) => ({ ...prev, endTime: `${String(endHour).padStart(2, '0')}:${String(m).padStart(2, '0')}` }));
     }
   };
