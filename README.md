@@ -123,4 +123,4 @@ For the Debian VPS deployment, including SMTP environment, systemd, and Nginx pr
 
 ## License
 
-MIT
+[BSD 3-Clause](LICENSE)
